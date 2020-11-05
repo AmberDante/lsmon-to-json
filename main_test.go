@@ -261,6 +261,126 @@ func Test_splitFeature(t *testing.T) {
    |- Maximum concurrent user(s)     : 99999`,
 			wantAdditionalInfo: "",
 		},
+		{
+			name: "test feature and additional stuff",
+			args: args{` |- Feature Information
+   |- Feature name                   : "PID-MANAGER"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License" 
+
+   |- License Information
+     |- License Hash                   : 91F4477587CCB838
+     |- License type                   : "Normal License" 
+     |- License Version                : 0x08600000
+     |- License storage name           : C:\AVEVA\AVEVA Licensing System\RMS\lservrc_AVEVA
+     |- License status                 : Active
+     |- Commuter license allowed       : NO
+`},
+			wantFeatreInfo: ` |- Feature Information
+   |- Feature name                   : "PID-MANAGER"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License" 
+
+`,
+			wantAdditionalInfo: `   |- License Information
+     |- License Hash                   : 91F4477587CCB838
+     |- License type                   : "Normal License" 
+     |- License Version                : 0x08600000
+     |- License storage name           : C:\AVEVA\AVEVA Licensing System\RMS\lservrc_AVEVA
+     |- License status                 : Active
+     |- Commuter license allowed       : NO
+`,
+		},
+		{
+			name: "test feature and additional stuff",
+			args: args{` |- Feature Information
+   |- Feature name                   : "AVEVA201"  	
+   |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : enssap
+     |- Is commuter token              : NO
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO
+`},
+			wantFeatreInfo: ` |- Feature Information
+   |- Feature name                   : "AVEVA201"  	
+   |- Allowed on VM                  : YES
+
+`,
+			wantAdditionalInfo: `   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : enssap
+     |- Is commuter token              : NO
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO
+`,
+		},
+		{
+			name: "test feature and additional stuff mixed",
+			args: args{` |- Feature Information
+   |- Feature name                   : "AVEVA201"  	
+   |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : enssap
+     |- Is commuter token              : NO
+
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO
+`},
+			wantFeatreInfo: ` |- Feature Information
+   |- Feature name                   : "AVEVA201"  	
+   |- Allowed on VM                  : YES
+
+`,
+			wantAdditionalInfo: `   |- Client Information
+     |- User name                      : enssap
+     |- Is commuter token              : NO
+
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO
+`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
