@@ -220,6 +220,167 @@ func Test_getFeturesInfo(t *testing.T) {
 			},
 			},
 		},
+		{
+			name: "Test_getFeturesInfo test full type of data",
+			args: args{`  Sentinel RMS Development Kit 9.1.0.0104 Application Monitor
+  Copyright (C) 2016 SafeNet, Inc.
+
+ [Contacting Sentinel RMS Development Kit server on host "999385-pc.samba.gazpromproject.ru"]
+
+
+ |- Feature Information
+   |- Feature name                   : "ARMS_ID"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License" 
+   |- License Version                : 0x08600000
+   |- Commuter license allowed       : NO
+   |- Unreserved tokens in use       : 0
+   |- Public vendor information      : C=GAZPROM_PROJECTIROVANIE;LFID=de5bf;M=nZKXn1G9ndbfrJiWmdy1nJa0nZGZodG2qtq1odK4ourfnZnbnKi7nZy=;
+   |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 2D298D42085926FC
+     |- Log encryption level           : 2
+     |- Check time tamper              : Yes
+     |- Server #1 locking code         : Primary   = 2014-*16THL3AVVU6W4MC 
+     |- Sharing limit                  : 254
+     |- Token lifetime (heartbeat)     : 300 secs (5 min(s))
+     |- Allowed on VM                  : YES
+
+ |- Feature Information
+   |- Feature name                   : "AVEVA201"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License"
+   |- Sharing limit                  : 25
+   |- Token lifetime (heartbeat)     : 300 secs (5 min(s))
+   |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Sharing limit                  : 25
+     |- Token lifetime (heartbeat)     : 300 secs (5 min(s))
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- License type                   : "Normal License" 
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : enssap
+     |- Host name                      : OENS-1-8222
+     |- X display name                 : local
+     |- Group name                     : DefaultGrp
+     |- Status                         : Running since Tue Nov 03 11:34:40 2020 
+     |- Is commuter token              : NO
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Host name                      : CIM-1-8303
+     |- X display name                 : local
+     |- Group name                     : DefaultGrp
+     |- Status                         : Running since Tue Nov 03 11:19:09 2020 
+     |- Is commuter token              : NO
+
+   |- Client Information
+     |- User name                      : NikishinAV
+     |- Host name                      : aso-34
+     |- X display name                 : local
+     |- Group name                     : DefaultGrp
+     |- Status                         : Running since Tue Nov 03 10:06:18 2020 
+     |- Is commuter token              : NO
+ Press Enter to continue . . .`},
+			want: fetures{Features: []feature{
+				{
+					feature: map[string]string{
+						"Feature name":              "ARMS_ID",
+						"Feature version":           "1.0",
+						"License type":              "Normal License",
+						"License Version":           "0x08600000",
+						"Commuter license allowed":  "NO",
+						"Unreserved tokens in use":  "0",
+						"Public vendor information": "C=GAZPROM_PROJECTIROVANIE;LFID=de5bf;M=nZKXn1G9ndbfrJiWmdy1nJa0nZGZodG2qtq1odK4ourfnZnbnKi7nZy=;",
+						"Allowed on VM":             "YES",
+					},
+					LicenseInformation: []licenseInformation{
+						licenseInformation{
+							LicenseInformation: map[string]string{
+								"License Hash":               "2D298D42085926FC",
+								"Log encryption level":       "2",
+								"Check time tamper":          "Yes",
+								"Server #1 locking code":     "Primary = 2014-*16THL3AVVU6W4MC",
+								"Sharing limit":              "254",
+								"Token lifetime (heartbeat)": "300 secs (5 min(s))",
+								"Allowed on VM":              "YES",
+							},
+						},
+					},
+					ClientInformation: nil,
+				},
+				{
+					feature: map[string]string{
+						"Feature name":               "AVEVA201",
+						"Feature version":            "1.0",
+						"License type":               "Normal License",
+						"Sharing limit":              "25",
+						"Token lifetime (heartbeat)": "300 secs (5 min(s))",
+						"Allowed on VM":              "YES",
+					},
+					LicenseInformation: []licenseInformation{
+						licenseInformation{
+							LicenseInformation: map[string]string{
+								"License Hash":               "28BCBCF9FA5CA671",
+								"Sharing limit":              "25",
+								"Token lifetime (heartbeat)": "300 secs (5 min(s))",
+								"Allowed on VM":              "YES",
+							},
+						},
+						licenseInformation{
+							LicenseInformation: map[string]string{
+								"License Hash":  "00238CDCDFD2C987",
+								"License type":  "Normal License",
+								"Allowed on VM": "YES",
+							},
+						},
+					},
+					ClientInformation: []clientInformation{
+						clientInformation{
+							ClientInformation: map[string]string{
+								"User name":         "enssap",
+								"Host name":         "OENS-1-8222",
+								"X display name":    "local",
+								"Group name":        "DefaultGrp",
+								"Status":            "Running since Tue Nov 03 11:34:40 2020",
+								"Is commuter token": "NO",
+							},
+						},
+						clientInformation{
+							ClientInformation: map[string]string{
+								"User name":         "akotovskii",
+								"Host name":         "CIM-1-8303",
+								"X display name":    "local",
+								"Group name":        "DefaultGrp",
+								"Status":            "Running since Tue Nov 03 11:19:09 2020",
+								"Is commuter token": "NO",
+							},
+						},
+						clientInformation{
+							ClientInformation: map[string]string{
+								"User name":         "NikishinAV",
+								"Host name":         "aso-34",
+								"X display name":    "local",
+								"Group name":        "DefaultGrp",
+								"Status":            "Running since Tue Nov 03 10:06:18 2020",
+								"Is commuter token": "NO",
+							},
+						},
+					},
+				},
+			},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
