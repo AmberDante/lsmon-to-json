@@ -138,6 +138,7 @@ func textToMap(slice []string) (blockMap map[string]string) {
 		if strings.Index(v, ":") == -1 {
 			continue
 		}
+		v = strings.ReplaceAll(v, "\\", "\\\\")
 		v = strings.ReplaceAll(v, "\"", "")
 		v = strings.ReplaceAll(v, ": ", ":")
 		v = "{\"" + v + "\"}"

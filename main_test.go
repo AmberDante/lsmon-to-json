@@ -167,6 +167,15 @@ func Test_textToMap(t *testing.T) {
 			}},
 			wantBlockMap: map[string]string{},
 		},
+		{
+			name: "block 3",
+			args: args{[]string{
+				`     |- License storage name           : C:\AVEVA\AVEVA Licensing System\RMS\lservrc_AVEVA`,
+			}},
+			wantBlockMap: map[string]string{
+				"License storage name": "C:\\AVEVA\\AVEVA Licensing System\\RMS\\lservrc_AVEVA",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
