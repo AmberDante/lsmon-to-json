@@ -13,7 +13,7 @@ const (
 	exitOK           = 0
 	exitFail         = 1
 	introduction     = "[Contacting Sentinel RMS Development Kit"
-	ending           = " Press Enter to continue . . ."
+	ending           = "Press Enter to continue . . ."
 	featureDelimeter = " |- Feature Information"
 	licDelimeter     = "   |- License Information"
 	clientDelimeter  = "   |- Client Information"
@@ -77,12 +77,17 @@ func createJSON(s fetures) (string, error) {
 
 // trimBorders - trim unnecessary information
 func trimBorders(s string) string {
-	i1 := strings.Index(s, introduction) + len(introduction)
-	i1 = strings.Index(s[i1:], "\n\n\n")
-	s = s[i1:]
+	i1 := strings.Index(s, introduction)
+	if i1 >= 0 {
+		i1 = i1 + len(introduction)
+		i1 = strings.Index(s[i1:], "\n\n\n") + i1 + 3
+		s = s[i1:]
+	}
 	i1 = strings.LastIndex(s, ending)
-	s = s[:i1]
-	s = strings.Trim(s, "\n")
+	if i1 >= 0 {
+		s = s[:i1]
+	}
+	s = strings.Trim(s, "\n ")
 	return s
 }
 
