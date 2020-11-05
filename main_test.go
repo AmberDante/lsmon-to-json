@@ -176,3 +176,101 @@ func Test_textToMap(t *testing.T) {
 		})
 	}
 }
+
+func Test_getFeturesInfo(t *testing.T) {
+	type args struct {
+		lsmonOut string
+	}
+	tests := []struct {
+		name string
+		args args
+		want fetures
+	}{
+		// TODO: Add test cases.
+		{
+			name: "Test_getFeturesInfo test border trim",
+			args: args{`Sentinel RMS Development Kit 9.1.0.0104 Application Monitor
+  Copyright (C) 2016 SafeNet, Inc.
+
+ [Contacting Sentinel RMS Development Kit server on host "999385-pc.samba.gazpromproject.ru"]
+
+
+ |- Feature Information
+   |- Feature name                   : "ARMS_ID"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License" 
+   |- License Version                : 0x08600000
+   |- Commuter license allowed       : NO
+   |- Maximum concurrent user(s)     : 99999
+ Press Enter to continue . . .`},
+			want: fetures{Features: []feature{
+				{
+					feature: map[string]string{
+						"Feature name":               "ARMS_ID",
+						"Feature version":            "1.0",
+						"License Version":            "0x08600000",
+						"License type":               "Normal License",
+						"Commuter license allowed":   "NO",
+						"Maximum concurrent user(s)": "99999",
+					},
+					LicenseInformation: nil,
+					ClientInformation:  nil,
+				},
+			},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getFeturesInfo(tt.args.lsmonOut); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getFeturesInfo() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_splitFeature(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name               string
+		args               args
+		wantFeatreInfo     string
+		wantAdditionalInfo string
+	}{
+		// TODO: Add test cases.
+		{
+			name: "test one feature",
+			args: args{` |- Feature Information
+   |- Feature name                   : "ARMS_ID"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License" 
+   |- License Version                : 0x08600000
+   |- Commuter license allowed       : NO
+   |- Maximum concurrent user(s)     : 99999`},
+			wantFeatreInfo: ` |- Feature Information
+   |- Feature name                   : "ARMS_ID"  	
+   |- Feature version                : "1.0"
+
+   |- License type                   : "Normal License" 
+   |- License Version                : 0x08600000
+   |- Commuter license allowed       : NO
+   |- Maximum concurrent user(s)     : 99999`,
+			wantAdditionalInfo: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotFeatreInfo, gotAdditionalInfo := splitFeature(tt.args.s)
+			if gotFeatreInfo != tt.wantFeatreInfo {
+				t.Errorf("splitFeature() gotFeatreInfo = %v, want %v", gotFeatreInfo, tt.wantFeatreInfo)
+			}
+			if gotAdditionalInfo != tt.wantAdditionalInfo {
+				t.Errorf("splitFeature() gotAdditionalInfo = %v, want %v", gotAdditionalInfo, tt.wantAdditionalInfo)
+			}
+		})
+	}
+}

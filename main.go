@@ -121,7 +121,9 @@ func splitFeature(s string) (featreInfo, additionalInfo string) {
 		featreInfo = s[:i1]
 		additionalInfo = s[i1:]
 	}
-
+	if i1 < 0 && i2 < 0 {
+		featreInfo = s
+	}
 	return featreInfo, additionalInfo
 }
 
