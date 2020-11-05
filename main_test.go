@@ -394,3 +394,213 @@ func Test_splitFeature(t *testing.T) {
 		})
 	}
 }
+
+func Test_getLicenseInformation(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []licenseInformation
+	}{
+		// TODO: Add test cases.
+		{
+			name: "get licenses 1",
+			args: args{`
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : enssap
+     |- Is commuter token              : NO
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO
+`},
+			want: []licenseInformation{
+				licenseInformation{map[string]string{
+					"License Hash":  "28BCBCF9FA5CA671",
+					"Allowed on VM": "YES",
+				}},
+				licenseInformation{map[string]string{
+					"License Hash":  "00238CDCDFD2C987",
+					"Allowed on VM": "YES",
+				}},
+			},
+		},
+		{
+			name: "get licenses 2",
+			args: args{`   |- Client Information
+     |- User name                      : enssap
+     |- Is commuter token              : NO
+
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO
+`},
+			want: []licenseInformation{
+				licenseInformation{map[string]string{
+					"License Hash":  "28BCBCF9FA5CA671",
+					"Allowed on VM": "YES",
+				}},
+				licenseInformation{map[string]string{
+					"License Hash":  "00238CDCDFD2C987",
+					"Allowed on VM": "YES",
+				}},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getLicenseInformation(tt.args.s); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getLicenseInformation() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_getClientInformation(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []clientInformation
+	}{
+		// TODO: Add test cases.
+		{
+			name: "test clients info 1",
+			args: args{`
+   |- Client Information
+     |- User name                      : enssap
+     |- Host name                      : OENS-1-8222
+     |- Is commuter token              : NO
+
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Is commuter token              : NO`},
+			want: []clientInformation{
+				{map[string]string{
+					"User name":         "enssap",
+					"Host name":         "OENS-1-8222",
+					"Is commuter token": "NO",
+				}},
+				{map[string]string{
+					"User name":         "akotovskii",
+					"Is commuter token": "NO",
+				}},
+			},
+		},
+		{
+			name: "test clients info 1",
+			args: args{`
+   |- License Information
+     |- License Hash                   : 28BCBCF9FA5CA671
+     |- License type                   : "Normal License" 
+     |- License Version                : 0x08600000
+     |- License storage name           : C:\AVEVA\AVEVA Licensing System\RMS\lservrc_AVEVA
+     |- License status                 : Active
+     |- Commuter license allowed       : NO
+     |- Maximum concurrent user(s)     : 130
+     |- Soft limit on users            : Unlimited
+     |- License start date             : Fri Jun 19 00:00:00 2020
+     |- Expiration date                : Sat Nov 19 23:59:59 2022
+     |- Log encryption level           : 2
+     |- Check time tamper              : Yes
+     |- Application-server locking     : Server-locked license.
+     |- Server #1 locking code         : Primary   = 2014-*16THL3AVVU6W4MC 
+     |- Additive/exclusive/aggregate   : Aggregate license(Additive without restrictions).
+     |- Sharing criterion              : Vendor defined criteria based sharing.
+     |- Sharing limit                  : 25
+     |- Token lifetime (heartbeat)     : 300 secs (5 min(s))
+     |- Allowed on VM                  : YES
+
+   |- License Information
+     |- License Hash                   : 00238CDCDFD2C987
+     |- License type                   : "Normal License" 
+     |- License Version                : 0x08600000
+     |- License storage name           : C:\AVEVA\AVEVA Licensing System\RMS\lservrc_AVEVA
+     |- License status                 : Inactive
+     |- Commuter license allowed       : NO
+     |- Maximum concurrent user(s)     : 5
+     |- Soft limit on users            : Unlimited
+     |- License start date             : Mon Jun 22 00:00:00 2020
+     |- Expiration date                : Tue Jun 23 23:59:59 2020
+     |- Log encryption level           : 2
+     |- Check time tamper              : Yes
+     |- Application-server locking     : Server-locked license.
+     |- Server #1 locking code         : Primary   = 2014-*16THL3AVVU6W4MC 
+     |- Additive/exclusive/aggregate   : Aggregate license(Additive without restrictions).
+     |- Sharing criterion              : Vendor defined criteria based sharing.
+     |- Sharing limit                  : 25
+     |- Token lifetime (heartbeat)     : 300 secs (5 min(s))
+     |- Allowed on VM                  : YES
+
+   |- Client Information
+     |- User name                      : enssap
+     |- Host name                      : OENS-1-8222
+     |- X display name                 : local
+     |- Group name                     : DefaultGrp
+     |- Status                         : Running since Tue Nov 03 11:34:40 2020 
+     |- Is commuter token              : NO
+
+   |- Client Information
+     |- User name                      : akotovskii
+     |- Host name                      : CIM-1-8303
+     |- X display name                 : local
+     |- Group name                     : DefaultGrp
+     |- Status                         : Running since Tue Nov 03 11:19:09 2020 
+     |- Is commuter token              : NO
+`},
+			want: []clientInformation{
+				{map[string]string{
+					"User name":         "enssap",
+					"Host name":         "OENS-1-8222",
+					"X display name":    "local",
+					"Group name":        "DefaultGrp",
+					"Status":            "Running since Tue Nov 03 11:34:40 2020",
+					"Is commuter token": "NO",
+				}},
+				{map[string]string{
+					"User name":         "akotovskii",
+					"Host name":         "CIM-1-8303",
+					"X display name":    "local",
+					"Group name":        "DefaultGrp",
+					"Status":            "Running since Tue Nov 03 11:19:09 2020",
+					"Is commuter token": "NO",
+				}},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getClientInformation(tt.args.s); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getClientInformation() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

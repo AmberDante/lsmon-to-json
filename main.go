@@ -199,13 +199,44 @@ func parseFeature(s string) feature {
 // getLicenseInformation - get License Information
 func getLicenseInformation(s string) []licenseInformation {
 	var lics []licenseInformation
+	var licsSlice, licSlice []string
+
+	licsSlice = strings.Split(s, licDelimeter)
+	for _, v := range licsSlice {
+		i1 := strings.Index(v, clientDelimeter)
+		if i1 >= 0 {
+			v = v[:i1]
+		}
+		v = strings.Trim(v, " |-\n\t")
+		if len(v) == 0 {
+			continue
+		}
+		licSlice = strings.Split(v, "\n     |- ")
+
+		lics = append(lics, licenseInformation{LicenseInformation: textToMap(licSlice)})
+	}
 
 	return lics
 }
 
 // getClientInformation - get Client Information
 func getClientInformation(s string) []clientInformation {
-	var clinfo []clientInformation
+	var clientsInfo []clientInformation
+	var clientsSlice, clSlice []string
 
-	return clinfo
+	clientsSlice = strings.Split(s, clientDelimeter)
+	for _, v := range clientsSlice {
+		i1 := strings.Index(v, licDelimeter)
+		if i1 >= 0 {
+			v = v[:i1]
+		}
+		v = strings.Trim(v, " |-\n\t")
+		if len(v) == 0 {
+			continue
+		}
+		clSlice = strings.Split(v, "\n     |- ")
+		clientsInfo = append(clientsInfo, clientInformation{ClientInformation: textToMap(clSlice)})
+	}
+
+	return clientsInfo
 }
