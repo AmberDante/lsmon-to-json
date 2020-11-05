@@ -100,17 +100,85 @@ func splitdata(s string, sep string) []string {
 	return strings.Split(s, sep)
 }
 
+// splitFeature - split Feture Info from another stuff
+func splitFeature(s string) (featreInfo, additionalInfo string) {
+	i1 := strings.Index(s, licDelimeter)
+	i2 := strings.Index(s, clientDelimeter)
+
+	if i1 >= 0 && i2 >= 0 && i1 < i2 {
+		featreInfo = s[:i1]
+		additionalInfo = s[i1:]
+	}
+	if i1 >= 0 && i2 >= 0 && i1 > i2 {
+		featreInfo = s[:i2]
+		additionalInfo = s[i2:]
+	}
+	if i1 < 0 && i2 > 0 {
+		featreInfo = s[:i2]
+		additionalInfo = s[i2:]
+	}
+	if i1 > 0 && i2 < 0 {
+		featreInfo = s[:i1]
+		additionalInfo = s[i1:]
+	}
+
+	return featreInfo, additionalInfo
+}
+
+// textToMap - Convert lsmon output blocks to map
+func textToMap(slice []string) (blockMap map[string]string) {
+	blockMap = make(map[string]string)
+	for _, v := range slice {
+		v = strings.Trim(v, " |-\n\t")
+		if len(v) == 0 {
+			continue
+		}
+		if strings.Index(v, ":") == -1 {
+			continue
+		}
+		v = strings.ReplaceAll(v, "\"", "")
+		v = strings.ReplaceAll(v, ": ", ":")
+		v = "{\"" + v + "\"}"
+		v = strings.ReplaceAll(v, "  ", "")
+		v = strings.Replace(v, ":", "\":\"", 1)
+		v = strings.Replace(v, " \":", "\":", 1)
+
+		var stringMap map[string]interface{}
+		if err := json.Unmarshal([]byte(v), &stringMap); err != nil {
+			panic(err)
+		}
+
+		for i, element := range stringMap {
+			e, ok := element.(string)
+			if ok {
+				e = strings.Trim(e, " \t\n")
+				blockMap[i] = e
+			}
+		}
+	}
+	return blockMap
+}
+
 // getFeturesInfo - get Feature Information
 func getFeturesInfo(lsmonOut string) fetures {
 	var feats fetures
-	// var feturesInfo []string
+	// feturesInfo - Slice of features. Text splitted by features blocks
+	var feturesInfo []string
+	var featureInfo, additionalStuff string
 	lsmonOut = trimBorders(lsmonOut)
-	// feturesInfo = splitdata(lsmonOut, featureDelimeter)
+	feturesInfo = splitdata(lsmonOut, featureDelimeter)
 
 	// Split data for features blocks
-	// for i, data := range feturesInfo {
-
-	// }
+	for i, data := range feturesInfo {
+		featureInfo, additionalStuff = splitFeature(data)
+		feats.Features = append(feats.Features, parseFeature(featureInfo))
+		if len(additionalStuff) > 0 {
+			// TODO get all License Information
+			feats.Features[i].LicenseInformation = getLicenseInformation(additionalStuff)
+			// TODO get all client Information
+			feats.Features[i].ClientInformation = getClientInformation(additionalStuff)
+		}
+	}
 
 	return feats
 }
@@ -118,20 +186,24 @@ func getFeturesInfo(lsmonOut string) fetures {
 // parseFeature - parse Feature Information
 func parseFeature(s string) feature {
 	var feat feature
+	var slice []string
 
+	s = strings.Trim(s, " |-\n\t")
+	slice = strings.Split(s, "\n   |- ")
+	feat.feature = textToMap(slice)
 	return feat
 }
 
 // getLicenseInformation - get License Information
-func getLicenseInformation(s string) licenseInformation {
-	var lics licenseInformation
+func getLicenseInformation(s string) []licenseInformation {
+	var lics []licenseInformation
 
 	return lics
 }
 
 // getClientInformation - get Client Information
-func getClientInformation(s string) clientInformation {
-	var clinfo clientInformation
+func getClientInformation(s string) []clientInformation {
+	var clinfo []clientInformation
 
 	return clinfo
 }
