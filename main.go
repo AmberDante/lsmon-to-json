@@ -24,9 +24,9 @@ type fetures struct {
 }
 
 type feature struct {
-	Feature            map[string]string
-	LicenseInformation []licenseInformation
-	ClientInformation  []clientInformation
+	Feature             map[string]string
+	LicensesInformation []licenseInformation
+	ClientsInformation  []clientInformation
 }
 
 type licenseInformation struct {
@@ -177,9 +177,9 @@ func getFeturesInfo(lsmonOut string) fetures {
 		feats.Features = append(feats.Features, parseFeature(featureInfo))
 		if len(additionalStuff) > 0 {
 			// TODO get all License Information
-			feats.Features[i].LicenseInformation = getLicenseInformation(additionalStuff)
+			feats.Features[i].LicensesInformation = getLicenseInformation(additionalStuff)
 			// TODO get all client Information
-			feats.Features[i].ClientInformation = getClientInformation(additionalStuff)
+			feats.Features[i].ClientsInformation = getClientInformation(additionalStuff)
 		}
 	}
 

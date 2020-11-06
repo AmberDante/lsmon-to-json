@@ -223,8 +223,8 @@ func Test_getFeturesInfo(t *testing.T) {
 						"Commuter license allowed":   "NO",
 						"Maximum concurrent user(s)": "99999",
 					},
-					LicenseInformation: nil,
-					ClientInformation:  nil,
+					LicensesInformation: nil,
+					ClientsInformation:  nil,
 				},
 			},
 			},
@@ -313,7 +313,7 @@ func Test_getFeturesInfo(t *testing.T) {
 						"Public vendor information": "C=GAZPROM_PROJECTIROVANIE;LFID=de5bf;M=nZKXn1G9ndbfrJiWmdy1nJa0nZGZodG2qtq1odK4ourfnZnbnKi7nZy=;",
 						"Allowed on VM":             "YES",
 					},
-					LicenseInformation: []licenseInformation{
+					LicensesInformation: []licenseInformation{
 						licenseInformation{
 							LicenseInformation: map[string]string{
 								"License Hash":               "2D298D42085926FC",
@@ -326,7 +326,7 @@ func Test_getFeturesInfo(t *testing.T) {
 							},
 						},
 					},
-					ClientInformation: nil,
+					ClientsInformation: nil,
 				},
 				{
 					Feature: map[string]string{
@@ -337,7 +337,7 @@ func Test_getFeturesInfo(t *testing.T) {
 						"Token lifetime (heartbeat)": "300 secs (5 min(s))",
 						"Allowed on VM":              "YES",
 					},
-					LicenseInformation: []licenseInformation{
+					LicensesInformation: []licenseInformation{
 						licenseInformation{
 							LicenseInformation: map[string]string{
 								"License Hash":               "28BCBCF9FA5CA671",
@@ -354,7 +354,7 @@ func Test_getFeturesInfo(t *testing.T) {
 							},
 						},
 					},
-					ClientInformation: []clientInformation{
+					ClientsInformation: []clientInformation{
 						clientInformation{
 							ClientInformation: map[string]string{
 								"User name":         "enssap",
@@ -561,7 +561,7 @@ func Test_getFeturesInfo(t *testing.T) {
 						"Public vendor information":    "C=GAZPROM_PROJECTIROVANIE;LFID=de5bf;M=nZKXn1G9ndbfrJiWmdy1nJa0nZGZodG2qtq1odK4ourfnZnbnKi7nZy=;",
 						"Allowed on VM":                "YES",
 					},
-					LicenseInformation: []licenseInformation{
+					LicensesInformation: []licenseInformation{
 						licenseInformation{
 							LicenseInformation: map[string]string{
 								"License Hash":                 "2D298D42085926FC",
@@ -586,7 +586,7 @@ func Test_getFeturesInfo(t *testing.T) {
 							},
 						},
 					},
-					ClientInformation: nil,
+					ClientsInformation: nil,
 				},
 				{
 					Feature: map[string]string{
@@ -613,7 +613,7 @@ func Test_getFeturesInfo(t *testing.T) {
 						"Public vendor information":    "C=GAZPROM_PROJECTIROVANIE;LFID=de5bf;M=nZKXn1G9reeZm0u1odq4qteZnum1mZzeoeeWmKq5qZq2qKu1mKu7nZy=;PC=V00FN201;PN=QVZFVkEgRXZlcnl0aGluZzNE4oSi;",
 						"Allowed on VM":                "YES",
 					},
-					LicenseInformation: []licenseInformation{
+					LicensesInformation: []licenseInformation{
 						licenseInformation{
 							LicenseInformation: map[string]string{
 								"License Hash":                 "28BCBCF9FA5CA671",
@@ -661,7 +661,7 @@ func Test_getFeturesInfo(t *testing.T) {
 							},
 						},
 					},
-					ClientInformation: []clientInformation{
+					ClientsInformation: []clientInformation{
 						clientInformation{
 							ClientInformation: map[string]string{
 								"User name":         "enssap",
@@ -1106,13 +1106,13 @@ func Test_createJSON(t *testing.T) {
 							"Commuter license allowed":   "NO",
 							"Maximum concurrent user(s)": "99999",
 						},
-						LicenseInformation: nil,
-						ClientInformation:  nil,
+						LicensesInformation: nil,
+						ClientsInformation:  nil,
 					},
 				},
 				},
 			},
-			want:    "{\"Features\":[{\"Feature\":{\"Commuter license allowed\":\"NO\",\"Feature name\":\"ARMS_ID\",\"Feature version\":\"1.0\",\"License Version\":\"0x08600000\",\"License type\":\"Normal License\",\"Maximum concurrent user(s)\":\"99999\"},\"LicenseInformation\":null,\"ClientInformation\":null}]}",
+			want:    "{\"Features\":[{\"Feature\":{\"Commuter license allowed\":\"NO\",\"Feature name\":\"ARMS_ID\",\"Feature version\":\"1.0\",\"License Version\":\"0x08600000\",\"License type\":\"Normal License\",\"Maximum concurrent user(s)\":\"99999\"},\"LicensesInformation\":null,\"ClientsInformation\":null}]}",
 			wantErr: false,
 		},
 	}
