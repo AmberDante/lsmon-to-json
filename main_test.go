@@ -113,7 +113,7 @@ func Test_parseFeature(t *testing.T) {
    |- Unreserved tokens in use       : 0
 
 `},
-			want: feature{feature: map[string]string{
+			want: feature{Feature: map[string]string{
 				"Feature name":               "ARMS_ID",
 				"Feature version":            "1.0",
 				"License type":               "Normal License",
@@ -215,7 +215,7 @@ func Test_getFeturesInfo(t *testing.T) {
  Press Enter to continue . . .`},
 			want: fetures{Features: []feature{
 				{
-					feature: map[string]string{
+					Feature: map[string]string{
 						"Feature name":               "ARMS_ID",
 						"Feature version":            "1.0",
 						"License Version":            "0x08600000",
@@ -303,7 +303,7 @@ func Test_getFeturesInfo(t *testing.T) {
  Press Enter to continue . . .`},
 			want: fetures{Features: []feature{
 				{
-					feature: map[string]string{
+					Feature: map[string]string{
 						"Feature name":              "ARMS_ID",
 						"Feature version":           "1.0",
 						"License type":              "Normal License",
@@ -329,7 +329,7 @@ func Test_getFeturesInfo(t *testing.T) {
 					ClientInformation: nil,
 				},
 				{
-					feature: map[string]string{
+					Feature: map[string]string{
 						"Feature name":               "AVEVA201",
 						"Feature version":            "1.0",
 						"License type":               "Normal License",
@@ -537,7 +537,7 @@ func Test_getFeturesInfo(t *testing.T) {
  Press Enter to continue . . .`},
 			want: fetures{Features: []feature{
 				{
-					feature: map[string]string{
+					Feature: map[string]string{
 						"Feature name":                 "ARMS_ID",
 						"Feature version":              "1.0",
 						"License type":                 "Normal License",
@@ -589,7 +589,7 @@ func Test_getFeturesInfo(t *testing.T) {
 					ClientInformation: nil,
 				},
 				{
-					feature: map[string]string{
+					Feature: map[string]string{
 						"Feature name":                 "AVEVA201",
 						"Feature version":              "1.0",
 						"License type":                 "Normal License",
@@ -1077,6 +1077,54 @@ func Test_getClientInformation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := getClientInformation(tt.args.s); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("getClientInformation() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_createJSON(t *testing.T) {
+	type args struct {
+		s fetures
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{
+			name: "test border trim",
+			args: args{
+				fetures{Features: []feature{
+					{
+						Feature: map[string]string{
+							"Feature name":               "ARMS_ID",
+							"Feature version":            "1.0",
+							"License Version":            "0x08600000",
+							"License type":               "Normal License",
+							"Commuter license allowed":   "NO",
+							"Maximum concurrent user(s)": "99999",
+						},
+						LicenseInformation: nil,
+						ClientInformation:  nil,
+					},
+				},
+				},
+			},
+			want:    "{\"Features\":[{\"Feature\":{\"Commuter license allowed\":\"NO\",\"Feature name\":\"ARMS_ID\",\"Feature version\":\"1.0\",\"License Version\":\"0x08600000\",\"License type\":\"Normal License\",\"Maximum concurrent user(s)\":\"99999\"},\"LicenseInformation\":null,\"ClientInformation\":null}]}",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := createJSON(tt.args.s)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("createJSON() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("createJSON() = %v, want %v", got, tt.want)
 			}
 		})
 	}

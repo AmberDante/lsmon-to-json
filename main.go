@@ -24,7 +24,7 @@ type fetures struct {
 }
 
 type feature struct {
-	feature            map[string]string
+	Feature            map[string]string
 	LicenseInformation []licenseInformation
 	ClientInformation  []clientInformation
 }
@@ -193,7 +193,7 @@ func parseFeature(s string) feature {
 
 	s = strings.Trim(s, " |-\n\t")
 	slice = strings.Split(s, "\n   |- ")
-	feat.feature = textToMap(slice)
+	feat.Feature = textToMap(slice)
 	return feat
 }
 
