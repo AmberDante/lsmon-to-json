@@ -18,6 +18,7 @@ archives:
     files:
       - README.md
       - lsmon_json.sh
+      - zbx_export_templates_AVEVA_lics.xml
 
 checksum:
   name_template: 'checksums.txt'
