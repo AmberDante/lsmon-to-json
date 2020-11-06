@@ -17,6 +17,7 @@ archives:
         format: zip
     files:
       - README.md
+      - lsmon_json.sh
 
 checksum:
   name_template: 'checksums.txt'

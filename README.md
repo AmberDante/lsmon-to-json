@@ -1,7 +1,8 @@
 # lsmon-to-json
-Convert output of Sentinel RMS lsmon to JSON
+Convert output of Sentinel RMS lsmon to JSON  
+#lsmon #zabbix #json
 
-It can help you to get all necessary statistics of Sentinel RMS lsmon to JSON with one Item(Servers, features with issued and used lics, active users). Then zabbix can parse it with **JSONPath** to Dependent Items. It's mush more faster then use hundreds of External Items. (read the Warnning on [zabbix docs](ttps://www.zabbix.com/documentation/4.0/manual/config/items/itemtypes/external))
+It can help you to get all necessary statistics of Sentinel RMS lsmon to JSON with one Item(features with issued and used lics, active users). Then zabbix can parse it with **JSONPath** to Dependent Items. It's mush more faster then use hundreds of External Items. (read the Warnning on [zabbix docs](ttps://www.zabbix.com/documentation/4.0/manual/config/items/itemtypes/external))
 
 ## How to use
 
@@ -19,4 +20,5 @@ Example 2:
 On the host where Sentinel RMS lsmon runs you have to set PATH to **lsmon** and to **lsmon-to-json** or use absolute path to these files
 
 # Prerequisite
-zabbix version > 4.0.11
+zabbix version > 4.0.11  
+[jq](https://stedolan.github.io/jq/)
